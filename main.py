@@ -10,10 +10,10 @@ def reply():
     number = request.form.get("From")
     number = number.replace("whatsapp:", "")
     response = MessagingResponse()
-    msg = response.message(
-        f"Thanks for contacting me. You have sent '{text}' from {number}.")
-    msg1 = response.message("hey 2")
-    msg.media("https://hatrabbits.com/wp-content/uploads/2017/01/random.jpg")
+    if text == "Hi":
+        response.message("Hello")
+    else:
+        response.message("Sorry, I don't understand")
     return str(response)
 
 
