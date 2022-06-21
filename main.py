@@ -10,7 +10,7 @@ def reply():
     number = request.form.get("From")
     number = number.replace("whatsapp:", "")
     response = MessagingResponse()
-    if text == "Hi":
+    if "hi" in text.lower():
         response.message("Hello")
     else:
         response.message("Sorry, I don't understand")
