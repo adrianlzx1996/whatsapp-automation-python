@@ -87,6 +87,12 @@ def reply():
             response.message("Please enter your address to confirm the order.")
         else:
             response.message("Please enter a valid respone")
+    elif user["status"] == "address":
+        selected = user["item"]
+
+        response.message("Thanks for shopping with us")
+        response.message(
+            f"Your order for {selected} have received and will be delivered within an hour.")
     else:
         response.message("Sorry, I don't understand.")
 
