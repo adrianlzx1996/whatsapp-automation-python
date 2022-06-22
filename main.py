@@ -29,8 +29,11 @@ def reply():
     if bool(user) is False:
         response.message("Hi, thanks for contacting *The Red Velvet*. \n"
                          "You can choose from one of the following options below:\n\n"
-                         "*Type*\n\n1️⃣ To *contact* us \n2️⃣ *Order* Snacks\n"
-                         "3️⃣ To know our *working hours* \n4️⃣ To get our *address*")
+                         "*Type*\n\n"
+                         "1️⃣ To *contact* us \n"
+                         "2️⃣ *Order* Snacks\n"
+                         "3️⃣ To know our *working hours* "
+                         "\n4️⃣ To get our *address*")
         users.insert_one({"number": number, "status": "main", "messages": []})
     elif user["status"] == "main":
         try:
@@ -96,6 +99,19 @@ def reply():
 
         orders.insert_one({"number": number, "item": selected,
                           "address": text, "order_time": datetime.now()})
+
+        users.update_one({"number": number}, {
+            "$set": {"status": "ordered"}})
+    elif user["status"] == "ordered":
+        response.message("Hi, thanks for contacting *The Red Velvet* again. \n"
+                         "You can choose from one of the following options below:\n\n"
+                         "*Type*\n\n"
+                         "1️⃣ To *contact* us \n"
+                         "2️⃣ *Order* Snacks\n"
+                         "3️⃣ To know our *working hours* "
+                         "\n4️⃣ To get our *address*")
+        users.update_one({"number": number}, {
+            "$set": {"status": "main"}})
     else:
         response.message("Sorry, I don't understand.")
 
