@@ -1,7 +1,8 @@
 from datetime import datetime
+
 from flask import Flask, request
-from twilio.twiml.messaging_response import MessagingResponse
 from pymongo import MongoClient
+from twilio.twiml.messaging_response import MessagingResponse
 
 cluster = MongoClient(
     "mongodb+srv://adrian:z9Pb5KsRkzFmlMaO@cluster0.xj8hrn6.mongodb.net/")
@@ -31,6 +32,36 @@ def reply():
                          "*Type*\n\n1️⃣. To *contact* us \n2️⃣. *Order* Snacks\n"
                          "3️⃣. To know our *working hours* \n4️⃣. To get our *address*")
         users.insert_one({"number": number, "status": "main", "messages": []})
+    elif user["status"] == "main":
+        try:
+            option = int(text)
+        except:
+            response.message("Please enter a valid respone")
+            return str(response)
+
+        if option == 1:
+            response.message(
+                "You can contact us through phone or e-mail.\n\n*Phone*: +6 012 345 6789"
+                "\n*E-mail*: leongadrian36@gmail.com"
+            )
+        elif option == 2:
+            response.message("You've entered *ordering mode*")
+            response.message("You can select one of the following cakes to order:\n\n"
+                             "*Type*\n\n"
+                             "1️⃣ Red Velvet\n"
+                             "2️⃣ Dark Forest\n"
+                             "3️⃣ Ice Cream Cake\n"
+                             "4️⃣ Plum Cake\n"
+                             "0️⃣ Go Back\n"
+                             )
+            users.update_one({"number": number}, {
+                             "$set": {"status": "ordering"}})
+        elif option == 3:
+            response.message("We work everyday from *9 AM* to *9 PM*.")
+        elif option == 4:
+            response.message("We have multiple stores across the city. ")
+        else:
+            response.message("Sorry, I don't understand.")
     else:
         response.message("Sorry, I don't understand.")
 
