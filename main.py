@@ -92,7 +92,10 @@ def reply():
 
         response.message("Thanks for shopping with us")
         response.message(
-            f"Your order for {selected} have received and will be delivered within an hour.")
+            f"Your order for *{selected}* have received and will be delivered *within an hour*.")
+
+        orders.insert_one({"number": number, "item": selected,
+                          "address": text, "order_time": datetime.now()})
     else:
         response.message("Sorry, I don't understand.")
 
