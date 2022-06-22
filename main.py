@@ -29,8 +29,8 @@ def reply():
     if bool(user) is False:
         response.message("Hi, thanks for contacting *The Red Velvet*. \n"
                          "You can choose from one of the following options below:\n\n"
-                         "*Type*\n\n1️⃣. To *contact* us \n2️⃣. *Order* Snacks\n"
-                         "3️⃣. To know our *working hours* \n4️⃣. To get our *address*")
+                         "*Type*\n\n1️⃣ To *contact* us \n2️⃣ *Order* Snacks\n"
+                         "3️⃣ To know our *working hours* \n4️⃣ To get our *address*")
         users.insert_one({"number": number, "status": "main", "messages": []})
     elif user["status"] == "main":
         try:
@@ -62,6 +62,31 @@ def reply():
             response.message("We have multiple stores across the city. ")
         else:
             response.message("Sorry, I don't understand.")
+    elif user["status"] == "ordering":
+        try:
+            option = int(text)
+        except:
+            response.message("Please enter a valid respone")
+            return str(response)
+
+        if option == 0:
+            users.update_one({"number": number}, {"$set": {"status": "main"}})
+            response.message("You can choose from one of the following options below:\n\n"
+                             "*Type*\n\n1️⃣. To *contact* us \n2️⃣. *Order* Snacks\n"
+                             "3️⃣. To know our *working hours* \n4️⃣. To get our *address*")
+            return str(response)
+        elif 1 <= option <= 9:
+            cakes = ["Red Velvet", "Dark Forest",
+                     "Ice Cream Cake", "Plum Cake"]
+            selected = cakes[option - 1]
+            users.update_one({"number": number}, {
+                             "$set": {"status": "address"}})
+            users.update_one({"number": number}, {
+                             "$set": {"item": selected}})
+            response.message("Excelled choice!")
+            response.message("Please enter your address to confirm the order.")
+        else:
+            response.message("Please enter a valid respone")
     else:
         response.message("Sorry, I don't understand.")
 
